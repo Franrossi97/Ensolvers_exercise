@@ -1,0 +1,14 @@
+<form [formGroup]="editFolder" #fform="ngForm" class="row g-3" (ngSubmit)="onSubmit()">
+  <div class="col-auto">
+    <label for="staticEmail2" class="visually-hidden">Write a new name for this item:</label>
+    <input formControlName="itemname" type="text" class="form-control" placeholder="New item name">
+    <span *ngIf="editFolder.get('itemname').touched">
+      <span class="badge badge-secondary" *ngIf="editFolder.get('itemname').errors?.required">Insert a folder name</span>
+      <span class="badge badge-secondary" *ngIf="editFolder.get('itemname').errors?.maxlength">Folder name too long! Max Length is 20</span>
+      <span class="badge badge-secondary" *ngIf="editFolder.get('itemname').errors?.minlength">Folder name is not long enough! Max Length is 2</span>
+    </span>
+  </div>
+  <div class="col-auto" style="margin-top: 5.7%;">
+    <button class="btn btn-primary mb-3" type="submit" [disabled]="editFolder.invalid">Change</button>
+  </div>
+</form>

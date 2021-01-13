@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item active" aria-current="true">Folder > {{folderName}}</li>
+      <li class="list-group-item" *ngFor="let itemList of itemsList">
+        <div class="row" style="margin-left: 0.08em;">
+          <input class="form-check-input" type="radio" value="option1" [checked]="itemList.done" (click)="onChangeDone(itemList.id)">
+          &nbsp;{{itemList.content}}
+          <a routerLink="edit/{{itemList.id}}">&nbsp;&nbsp;Edit</a>
+        </div>
+      </li>
+    </ul>
+
+    <div class="row" style="margin-left: 0.08em; margin-top: 2em;">
+      <form [formGroup]="editFolder" #fform="ngForm" class="row g-3" (ngSubmit)="onSubmit()">
+        <div class="col-auto">
+          <label for="staticEmail2" class="visually-hidden">Write a new name for this item:</label>
+          <input formControlName="itemname" type="text" class="form-control" placeholder="New item name">
+          <span *ngIf="editFolder.get('itemname').touched">
+            <span class="badge badge-secondary" *ngIf="editFolder.get('itemname').errors?.required">Insert an item name</span>
+            <span class="badge badge-secondary" *ngIf="editFolder.get('itemname').errors?.maxlength">Folder name too long! Max Length is 20</span>
+            <span class="badge badge-secondary" *ngIf="editFolder.get('itemname').errors?.minlength">Folder name is not long enough! Max Length is 2</span>
+          </span>
+        </div>
+        <div class="col-auto" style="margin-top: 5.7%;">
+          <button class="btn btn-primary mb-3" type="submit" [disabled]="editFolder.invalid">Change</button>
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+
+  <div class="col-md-6">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

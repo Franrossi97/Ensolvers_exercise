@@ -1,0 +1,26 @@
+<div class="row" style="margin-top: 2%;">
+  <div class="col-md-4">
+    <div class="row">
+      <app-folder-list *ngFor="let list of lists" [list]="list"></app-folder-list>
+    </div>
+
+    <form [formGroup]="newFolder" #fform="ngForm" class="row g-3" (ngSubmit)="onSubmit()">
+      <div class="col-auto">
+        <label for="staticEmail2" class="visually-hidden">New folder:</label>
+        <input formControlName="foldername" type="text" class="form-control" placeholder="Folder name">
+        <span *ngIf="newFolder.get('foldername').touched">
+          <span class="badge badge-secondary" *ngIf="newFolder.get('foldername').errors?.required">Insert a folder name</span>
+          <span class="badge badge-secondary" *ngIf="newFolder.get('foldername').errors?.maxlength">Folder name too long! Max Length is 20</span>
+          <span class="badge badge-secondary" *ngIf="newFolder.get('foldername').errors?.minlength">Folder name is not long enough! Max Length is 2</span>
+        </span>
+      </div>
+      <div class="col-auto" style="margin-top: 5.7%;">
+        <button class="btn btn-primary mb-3" type="submit" [disabled]="newFolder.invalid">Add</button>
+      </div>
+    </form>
+
+  </div>
+  <div class="col-md-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>
