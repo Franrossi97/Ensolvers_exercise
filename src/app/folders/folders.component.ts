@@ -37,8 +37,18 @@ export class FoldersComponent implements OnInit
 
   onSubmit()
   {
-    this.folderService.creatNewFolder(this.newFolder.get('foldername').value);
-    this.loadFolders();
+    this.folderService.creatNewFolder(this.newFolder.get('foldername').value).subscribe(
+    {
+      next:response =>
+      {
+        this.loadFolders();
+        console.log(response);
+      },
+      error:error =>
+      {
+        alert(`Couldn't create the new folder. Error: ${error.message}`)
+      }
+    });
   }
 
 }

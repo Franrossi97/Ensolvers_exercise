@@ -13,7 +13,8 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 export class FolderComponent implements OnInit {
 
   editFolder: FormGroup;
-  folderID:number=0;
+  editIdItem:number;
+  folderID:number=-1;
   folderName:string="";
   itemsList: ItemList[]=[];
   constructor(private folderService: FolderService, private route: ActivatedRoute,
@@ -52,11 +53,40 @@ export class FolderComponent implements OnInit {
   onChangeDone(idItemList:number)
   {
     console.log(idItemList);
-    this.itemService.changeDone(idItemList);
+    this.itemService.changeDone(idItemList).subscribe(
+    {
+      next:response =>
+      {
+        console.log(response);
+        this.getListItems();
+      },
+      error:error =>
+      {
+        //alert(`Could not change the status. Error: ${error.message}`);
+        this.getListItems();
+      }
+    });
   }
 
   onSubmit()
   {
-    this.itemService.adNewItem(this.folderID,this.editFolder.get("itemname").value);
+    this.itemService.adNewItem(this.folderID,this.editFolder.get("itemname").value).subscribe(
+    {
+      next:response =>
+      {
+        console.log(response);
+        this.getListItems();
+      },
+      error:error =>
+      {
+        console.log(`Could not change the status. Error: ${error.message}`);
+        this.getListItems();
+      }
+    });
+  }
+
+  onEdit(id:number)
+  {
+    this.editIdItem=id;
   }
 }

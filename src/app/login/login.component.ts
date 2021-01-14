@@ -28,13 +28,29 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  checkLogin() {
-    if (this.loginservice.authenticate(this.username, this.password)
-    ) {
-      this.router.navigate([''])
-      this.invalidLogin = false
-    } else
-      this.invalidLogin = true
+  checkLogin()
+  {
+    const username=this.editFolder.get("username").value;
+    const password=this.editFolder.get("password").value;
+    this.loginservice.onLogging().subscribe(users =>
+    {
+      for(let i=0;i<users.length;i++)
+      {
+        console.log(users[i]);
+        if(users[i].username===username)
+        {
+          if(users[i].password===password)
+          {
+            console.log(password);
+            sessionStorage.setItem('username', username)
+            sessionStorage.setItem('user_id', users[i].id.toString());
+            sessionStorage.setItem('name', users[i].name);
+            this.router.navigate(['/folders']);
+          }
+        }
+      }
+    });
+
   }
 
 }

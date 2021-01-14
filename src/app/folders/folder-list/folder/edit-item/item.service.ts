@@ -1,19 +1,20 @@
 import { ProcessHttpmsgService } from './../../../../services/process-httpmsg.service';
-import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {baseURL} from '../../../../shared/baseUrl'
+import { ItemList } from 'src/app/shared/ItemList';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ItemService {
+export class ItemService
+{
 
   constructor(private httpClient: HttpClient, private processHttpmsgService: ProcessHttpmsgService) { }
 
 
-  adNewItem(folderId: number,content:string)
+  adNewItem(folderId: number,content:string): Observable<any>
   {
     const postUrl=`${baseURL}newitem/${folderId}`;
     console.log(postUrl);
@@ -24,10 +25,13 @@ export class ItemService {
         'Content-Type': 'application/json',
       })
     };
-    this.httpClient.post(postUrl,`{"content": "${content}"}`,httpOptions).subscribe(() => {},err => console.log(err));
+    var sendItem=new ItemList();
+    sendItem.content=content;
+    //return this.httpClient.post<ItemList>(postUrl, JSON.stringify(`{"content": "${content}"}`),httpOptions);//.subscribe(() => {},err => console.log(err));
+    return this.httpClient.post<ItemList>(postUrl, JSON.stringify(sendItem),httpOptions);
   }
 
-  editItemName(idItem:number, folderName: string)
+  editItemName(idItem:number, folderName: string): Observable<any>
   {
     const putUrl=`${baseURL}edititem/${idItem}`;
 
@@ -39,10 +43,10 @@ export class ItemService {
       })
     };
 
-    this.httpClient.put(putUrl, `{"content": "${folderName}"}`,httpOptions).subscribe(() => {},err => console.log(err));
+    return this.httpClient.put<ItemList>(putUrl, `{"content": "${folderName}"}`,httpOptions);//.subscribe(() => {},err => console.log(err));
   }
 
-  changeDone(idItem:number)
+  changeDone(idItem:number): Observable<any>
   {
     const putUrl=`${baseURL}doneitem/${idItem}`;
 
@@ -54,6 +58,6 @@ export class ItemService {
       })
     };
 
-    this.httpClient.put(putUrl,null).subscribe(() => {},err => console.log(err));
+    return this.httpClient.put<ItemList>(putUrl,null);//.subscribe(() => {},err => console.log(err));
   }
 }

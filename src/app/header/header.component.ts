@@ -1,3 +1,5 @@
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from './../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  name:String;
+  constructor(private authenticationService: AuthenticationService, private route: ActivatedRoute,
+    private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void
+  {
+    this.route.paramMap.subscribe(() =>
+    {
+      console.log(sessionStorage.getItem("name"));
+      this.name=sessionStorage.getItem("name");
+    });
+
+  }
+
+  onLogout()
+  {
+    this.authenticationService.logOut();
+    this.name='';
+    this.router.navigate(['login']);
   }
 
 }

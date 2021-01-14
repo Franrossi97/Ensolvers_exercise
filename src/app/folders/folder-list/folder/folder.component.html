@@ -6,7 +6,7 @@
         <div class="row" style="margin-left: 0.08em;">
           <input class="form-check-input" type="radio" value="option1" [checked]="itemList.done" (click)="onChangeDone(itemList.id)">
           &nbsp;{{itemList.content}}
-          <a routerLink="edit/{{itemList.id}}">&nbsp;&nbsp;Edit</a>
+          &nbsp;&nbsp;<a routerLink="edit/{{itemList.id}}">Edit</a>
         </div>
       </li>
     </ul>

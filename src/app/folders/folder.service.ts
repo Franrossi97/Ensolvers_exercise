@@ -27,7 +27,7 @@ export class FolderService
     return this.httpClient.get<GetResponseItems>(getUrl).pipe(map(response => response._embedded.listItems));
   }
 
-  creatNewFolder(folderName: string)
+  creatNewFolder(folderName: string):Observable<any>
   {
     const postUrl=`${baseURL}savelist/1`;
 
@@ -39,10 +39,10 @@ export class FolderService
       })
     };
 
-    this.httpClient.post(postUrl, `{"name": "${folderName}"}`,httpOptions).subscribe(() => {},err => console.log(err));
+    return this.httpClient.post<List>(postUrl, `{"name": "${folderName}"}`,httpOptions);//.subscribe(() => {},err => console.log(err));
   }
 
-  deleteAll(folderId:number)
+  deleteAll(folderId:number):Observable<any>
   {
     const deleteUrl=`${baseURL}deleteall/${folderId}`;
 
@@ -54,8 +54,12 @@ export class FolderService
       })
     };
 
-    this.httpClient.delete(deleteUrl,httpOptions).subscribe(() => {},err => console.log(err));
-    this.location.back();
+    return this.httpClient.delete<List>(deleteUrl,httpOptions);//.subscribe(() => {},err => console.log(err));
+  }
+
+  reloadFolders():Observable<List[]>
+  {
+    return this.getFolders();
   }
 }
 

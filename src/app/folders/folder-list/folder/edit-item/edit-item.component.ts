@@ -1,5 +1,5 @@
 import { ItemService } from './item.service';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,10 +15,11 @@ export class EditItemComponent implements OnInit {
   idItem:number;
   @Input() idList: String;
   @Input() nameList: String;
+  @Output() newNameEvent = new EventEmitter<string>();
 
   @ViewChild('ffrom') feedbackFormDirective;
   constructor(private formBuilder:FormBuilder, private itemService:ItemService,
-    private route: ActivatedRoute, private router: Router, private location: Location) { }
+    private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void
   {
@@ -36,9 +37,24 @@ export class EditItemComponent implements OnInit {
 
   onSubmit()
   {
-    this.itemService.editItemName(this.idItem,this.editFolder.get("itemname").value);
+    this.itemService.editItemName(this.idItem,this.editFolder.get("itemname").value).subscribe(
+    {
+      next:response =>
+      {
+        console.log(response);
+        this.newNameEvent.emit(response);
+
+      },
+      error:error =>
+      {
+        console.log(`Could not edit the list item. Error: ${error.message}`);
+        this.newNameEvent.emit("new name");
+      }
+    });
     this.editFolder.reset();
-    this.location.back();
+    //this.route.snapshot.paramMap.get("name");
+    console.log("Change");
+    this.router.navigate(['../']);
   }
 
 }

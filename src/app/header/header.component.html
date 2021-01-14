@@ -11,5 +11,8 @@
         </li>
       </ul>
     </div>
+
+    <label class="" style="margin-right: 2rem;" *ngIf="name">Hola {{name}}</label>
+    <button class="btn btn-outline-success" type="submit" (click)="onLogout()">Logout</button>
   </div>
 </nav>
